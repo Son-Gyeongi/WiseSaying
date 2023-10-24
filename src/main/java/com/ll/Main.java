@@ -9,6 +9,7 @@ public class Main {
 
         System.out.println("==명언 앱==");
         String str; // 입력값
+        int sequence = 0;
 
         do {
             System.out.print("명령 ) ");
@@ -19,7 +20,7 @@ public class Main {
                 String wiseSaying = s.nextLine();
                 System.out.print("작가 : ");
                 String author = s.nextLine();
-                System.out.println("1번 명언이 등록되었습니다.");
+                System.out.println(++sequence + "번 명언이 등록되었습니다.");
             }
             if (str.equals("종료")) {
                 System.exit(0);
