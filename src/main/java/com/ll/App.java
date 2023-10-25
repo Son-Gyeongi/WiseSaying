@@ -5,6 +5,7 @@ import java.util.Scanner;
 // 프로그램 중심
 public class App {
     void run() {
+        int sequence = 0;
         System.out.println("==명언==");
 
         while (true) {
@@ -20,7 +21,7 @@ public class App {
                 scanner.nextLine();
                 System.out.print("작가 : ");
                 scanner.nextLine();
-                System.out.println("1번 명언이 등록되었습니다.");
+                System.out.println(++sequence + "번 명언이 등록되었습니다.");
             }
         }
     }
