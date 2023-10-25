@@ -5,25 +5,19 @@ import java.util.Scanner;
 // 프로그램 중심
 public class App {
     void run() {
-        // 표준 입력, 키보드
-        Scanner scanner = new Scanner(System.in);
+        System.out.println("==명언 앱==");
 
-        do {
-            System.out.println("==명언 앱");
+        while (true) {
             System.out.print("명령 ) ");
+            // 표준 입력, 키보드
+            Scanner scanner = new Scanner(System.in);
             String cmd = scanner.nextLine();
 
-            //        System.out.printf("입력하신 명령 : %s\n", cmd);
-            System.out.printf("입력하신 명령어 : %s\n", cmd);
-
-            if (cmd.equals("등록")) {
-                System.out.print("명언 : ");
-                String talk = scanner.nextLine();
-                System.out.print("작가 : ");
-                String author = scanner.nextLine();
-            } else if (cmd.equals("종료")) {
-                System.exit(0);
+            if (cmd.equals("종료")) {
+                break; // 반복문 종료
             }
-        } while (true);
+
+            System.out.printf("입력하신 명령어 : %s\n", cmd);
+        }
     }
 }
