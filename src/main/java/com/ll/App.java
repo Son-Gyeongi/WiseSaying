@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class App {
     void run() {
         int lastQuotationId = 0;
-        System.out.println("==명언==");
+        System.out.println("==명언 앱==");
 
         List<Quotation> quotations = new ArrayList<>();
 
@@ -31,6 +31,8 @@ public class App {
                 int id = lastQuotationId;
 
                 System.out.printf("%d번 명언이 등록되었습니다.\n", id);
+
+                // Qutotation 생성자로 초기화하고 객체 만들기
                 Quotation quotation = new Quotation(id, content, authorName);
                 quotations.add(quotation);
             } else if (cmd.equals("목록")) {
