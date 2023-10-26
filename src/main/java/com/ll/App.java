@@ -34,6 +34,16 @@ public class App {
                 for (int i = 0; i < list.size(); i++) {
                     System.out.println(list.get((list.size()-1) - i));
                 }
+            } else if (cmd.equals("삭제?id=")) {
+                String deleteNum = scanner.nextLine();
+                for (int i = 0; i < list.size(); i++) {
+                    String listNum = list.get(i).substring(0,1);
+
+                    if (deleteNum.equals(listNum)) {
+                        list.remove(i);
+                        System.out.println(listNum + "번 명언이 삭제되었습니다.");
+                    }
+                }
             }
         }
     }
