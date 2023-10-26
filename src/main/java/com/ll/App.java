@@ -31,15 +31,16 @@ public class App {
                 actionWrite();
             } else if (cmd.equals("목록")) {
                 actionList();
-            } else if (cmd.equals("삭제")) {
-                int num = scanner.nextInt();
-
-                for (int i = 0; i < quotations.size(); i++) {
-                    if (num == quotations.get(i).id) {
-                        quotations.remove(i);
-                        System.out.printf("%d번 명언이 삭제되었습니다.\n", i + 1);
-                    }
-                }
+            } else if (cmd.startsWith("삭제?")) {
+                actionRemove(cmd);
+//                int num = scanner.nextInt();
+//
+//                for (int i = 0; i < quotations.size(); i++) {
+//                    if (num == quotations.get(i).id) {
+//                        quotations.remove(i);
+//                        System.out.printf("%d번 명언이 삭제되었습니다.\n", i + 1);
+//                    }
+//                }
             }
         }
     }
@@ -74,5 +75,13 @@ public class App {
             Quotation quotation = quotations.get(i);
             System.out.printf("%d / %s / %s\n", quotation.id, quotation.authorName, quotation.content);
         }
+    }
+
+    void actionRemove(String cmd) {
+        // 어떤걸 삭제 매개변수 받아야 한다.
+        String idStr = cmd.replace("삭제?id=", "");
+        int id = Integer.parseInt(idStr);
+
+        System.out.printf("%d번 명언이 삭제되었습니다.\n", id);
     }
 }
