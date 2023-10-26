@@ -33,14 +33,6 @@ public class App {
                 actionList();
             } else if (cmd.startsWith("삭제?")) {
                 actionRemove(cmd);
-//                int num = scanner.nextInt();
-//
-//                for (int i = 0; i < quotations.size(); i++) {
-//                    if (num == quotations.get(i).id) {
-//                        quotations.remove(i);
-//                        System.out.printf("%d번 명언이 삭제되었습니다.\n", i + 1);
-//                    }
-//                }
             }
         }
     }
@@ -78,9 +70,27 @@ public class App {
     }
 
     void actionRemove(String cmd) {
-        // 어떤걸 삭제 매개변수 받아야 한다.
-        String idStr = cmd.replace("삭제?id=", "");
-        int id = Integer.parseInt(idStr);
+        // 어떤걸 삭제? 매개변수 받아야 한다. / Bits 조각이라는 뜻
+        String[] cmdBits = cmd.split("\\?", 2);
+        String action = cmdBits[0];
+        String queryString = cmdBits[1];
+
+        String[] queryStringBits = queryString.split("&");
+
+        int id = 0;
+
+        for (int i = 0; i < queryStringBits.length; i++) {
+            String queryParamStr = queryStringBits[i];
+
+            String[] queryParamStrBits = queryParamStr.split("=", 2);
+
+            String paramName = queryParamStrBits[0];
+            String paramValue = queryParamStrBits[1];
+
+            if (paramName.equals("id")) {
+                id = Integer.parseInt(paramValue);
+            }
+        }
 
         System.out.printf("%d번 명언이 삭제되었습니다.\n", id);
     }
