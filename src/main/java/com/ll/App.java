@@ -39,10 +39,23 @@ public class App {
                 System.out.println("번호 / 작가 / 명언");
                 System.out.println("----------------------");
 
+                if (quotations.isEmpty()) { // 명언이 없다면
+                    System.out.println("등록된 명언이 없습니다.");
+                }
+
                 // 목록 내림차순으로 보여주기
                 for (int i = quotations.size() - 1; i >= 0; i--) {
                     Quotation quotation = quotations.get(i);
                     System.out.printf("%d / %s / %s\n", quotation.id, quotation.authorName, quotation.content);
+                }
+            } else if (cmd.equals("삭제")) {
+                int num = scanner.nextInt();
+
+                for (int i = 0; i < quotations.size(); i++) {
+                    if (num == quotations.get(i).id) {
+                        quotations.remove(i);
+                        System.out.printf("%d번 명언이 삭제되었습니다.\n", i + 1);
+                    }
                 }
             }
         }
