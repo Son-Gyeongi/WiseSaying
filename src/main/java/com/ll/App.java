@@ -33,6 +33,8 @@ public class App {
                 actionList();
             } else if (cmd.startsWith("삭제?")) {
                 actionRemove(cmd);
+            } else if (cmd.startsWith("수정?")) {
+                actionModify(cmd);
             }
         }
     }
@@ -69,29 +71,57 @@ public class App {
         }
     }
 
-    void actionRemove(String cmd) {
-        // 어떤걸 삭제? 매개변수 받아야 한다. / Bits 조각이라는 뜻
+    void actionRemove(String cmd) { // 어떤걸 삭제? 매개변수 받아야 한다.
+
+        // 나누고 싶은 문자열(cmd), 받고 싶은 paramName("id"), 없는 경우 반환을 0으로
+        int id = getParamAsInt(cmd, "id", 0);
+
+        // id값이 이상하거나 없을경우
+        if (id == 0) {
+            System.out.println("id를 정확히 입력해주세요.");
+            return; // 함수를 끝낸다.
+        }
+
+        System.out.printf("%d번 수정이 삭제되었습니다.\n", id);
+    }
+
+    void actionModify(String cmd) {
+        int id = getParamAsInt(cmd, "id", 0);
+
+        // id값이 이상하거나 없을경우
+        if (id == 0) {
+            System.out.println("id를 정확히 입력해주세요.");
+            return; // 함수를 끝낸다.
+        }
+
+        System.out.printf("%d번 명언이 수정되었습니다.\n", id);
+    }
+
+    int getParamAsInt(String cmd, String paramName, int defaultValue) {
+        // Bits 조각이라는 뜻
         String[] cmdBits = cmd.split("\\?", 2);
-        String action = cmdBits[0];
         String queryString = cmdBits[1];
 
         String[] queryStringBits = queryString.split("&");
-
-        int id = 0;
 
         for (int i = 0; i < queryStringBits.length; i++) {
             String queryParamStr = queryStringBits[i];
 
             String[] queryParamStrBits = queryParamStr.split("=", 2);
 
-            String paramName = queryParamStrBits[0];
+            String _paramName = queryParamStrBits[0];
             String paramValue = queryParamStrBits[1];
 
-            if (paramName.equals("id")) {
-                id = Integer.parseInt(paramValue);
+            if (_paramName.equals(paramName)) {
+                try {
+                    // 문제가 없을 경우
+                    return Integer.parseInt(paramValue);
+                } catch (NumberFormatException e) {
+                    // 문제가 생긴 경우
+                    return defaultValue;
+                }
             }
         }
-
-        System.out.printf("%d번 명언이 삭제되었습니다.\n", id);
+        return defaultValue;
     }
 }
