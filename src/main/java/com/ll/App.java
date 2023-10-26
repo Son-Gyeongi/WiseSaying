@@ -25,6 +25,11 @@ public class App {
 
             String cmd = scanner.nextLine();
 
+            Rq rq = new Rq(cmd);
+
+            System.out.println("rq.getAction : " + rq.getAction());
+            System.out.println("rq.getParamAsInt : " + rq.getParamAsInt("id", 0));
+
             if (cmd.equals("종료")) {
                 break;
             } else if (cmd.equals("등록")) {
@@ -82,7 +87,7 @@ public class App {
             return; // 함수를 끝낸다.
         }
 
-        System.out.printf("%d번 수정이 삭제되었습니다.\n", id);
+        System.out.printf("%d번 명언이 삭제되었습니다.\n", id);
     }
 
     void actionModify(String cmd) {
