@@ -24,11 +24,17 @@ public class App {
             System.out.print("명령) ");
 
             String cmd = scanner.nextLine();
+            Rq rq;
 
-            Rq rq = new Rq(cmd);
+            try {
+                rq = new Rq(cmd);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                rq = new Rq();
+            }
 
-            System.out.println("rq.getAction : " + rq.getAction());
-            System.out.println("rq.getParamAsInt : " + rq.getParamAsInt("id", 0));
+
+//            System.out.println("rq.getAction : " + rq.getAction());
+//            System.out.println("rq.getParamAsInt : " + rq.getParamAsInt("id", 0));
 
             if (cmd.equals("종료")) {
                 break;
@@ -85,6 +91,15 @@ public class App {
         if (id == 0) {
             System.out.println("id를 정확히 입력해주세요.");
             return; // 함수를 끝낸다.
+        }
+
+        // 삭제
+        for (int i = 0; i < quotations.size(); i++) {
+            int findQuotationId = quotations.get(i).id;
+
+            if (findQuotationId == id) {
+                quotations.remove(i);
+            }
         }
 
         System.out.printf("%d번 명언이 삭제되었습니다.\n", id);

@@ -10,6 +10,10 @@ public class Rq {
     List<String> paramNames;
     List<String> paramValues;
 
+    Rq() {
+
+    }
+
     Rq(String cmd) {
         paramNames = new ArrayList<>();
         paramValues = new ArrayList<>();
