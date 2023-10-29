@@ -5,13 +5,14 @@ import java.util.List;
 import java.util.Scanner;
 
 public class App {
+    List<String> paramNames = new ArrayList<>();
+    List<String> paramValues = new ArrayList<>();
 
     void run() {
         Scanner scanner = new Scanner(System.in);
         int lastQuotationId = 0;
         List<Quotation> list = new ArrayList<>();
-        List<String> paramNames = new ArrayList<>();
-        List<String> paramValues = new ArrayList<>();
+
         System.out.println("==명언 앱==");
 
         while (true) {
@@ -42,32 +43,38 @@ public class App {
                     System.out.printf("%d / %s / %s\n", quotation.id, quotation.authorName, quotation.content);
                 }
             } else if (cmd.startsWith("삭제?")) {
-                String[] cmdBits = cmd.split("\\?", 2);
-                String action = cmdBits[0];
-                String queryString = cmdBits[1];
-
-                String[] queryStringBits = queryString.split("&");
-
-                for (int i = 0; i < queryStringBits.length; i++) {
-                    String[] paramBits = queryStringBits[i].split("=", 2);
-
-                    String paramName = paramBits[0];
-                    String paramValue = paramBits[1];
-
-                    paramNames.add(paramName);
-                    paramValues.add(paramValue);
-                }
-
-                int id = 0;
-
-                for (int i = 0; i < paramNames.size(); i++) {
-                    if (paramNames.get(i).equals("id")) {
-                        String index = paramValues.get(i);
-                        id = Integer.parseInt(index);
-                    }
-                }
+                // parmaName "id"의 paramValue를 반환
+                int id = getParamAsInt(cmd, "id");
                 System.out.printf("%d번 명언이 삭제되었습니다.\n", id);
             }
         }
+    }
+
+    // 입력 받은 queryString에서 paramNames, paramValues 나누기
+    int getParamAsInt(String cmd, String paramName) {
+        int defaultValue = 0; // 값이 없을 경우 반환값
+
+        String[] cmdBits = cmd.split("\\?", 2);
+//        String action = cmdBits[0];
+        String queryString = cmdBits[1];
+
+        String[] queryStringBits = queryString.split("&");
+
+        for (int i = 0; i < queryStringBits.length; i++) {
+            String[] paramBits = queryStringBits[i].split("=", 2);
+
+            String _paramName = paramBits[0];
+            String paramValue = paramBits[1];
+
+            paramNames.add(_paramName);
+            paramValues.add(paramValue);
+        }
+        for (int i = 0; i < paramNames.size(); i++) {
+            if (paramNames.get(i).equals(paramName)) {
+                String index = paramValues.get(i);
+                 return Integer.parseInt(index);
+            }
+        }
+        return defaultValue;
     }
 }
