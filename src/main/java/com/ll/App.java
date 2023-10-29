@@ -10,6 +10,8 @@ public class App {
         Scanner scanner = new Scanner(System.in);
         int lastQuotationId = 0;
         List<Quotation> list = new ArrayList<>();
+        List<String> paramNames = new ArrayList<>();
+        List<String> paramValues = new ArrayList<>();
         System.out.println("==명언 앱==");
 
         while (true) {
@@ -39,6 +41,32 @@ public class App {
                     Quotation quotation = list.get(i);
                     System.out.printf("%d / %s / %s\n", quotation.id, quotation.authorName, quotation.content);
                 }
+            } else if (cmd.startsWith("삭제?")) {
+                String[] cmdBits = cmd.split("\\?", 2);
+                String action = cmdBits[0];
+                String queryString = cmdBits[1];
+
+                String[] queryStringBits = queryString.split("&");
+
+                for (int i = 0; i < queryStringBits.length; i++) {
+                    String[] paramBits = queryStringBits[i].split("=", 2);
+
+                    String paramName = paramBits[0];
+                    String paramValue = paramBits[1];
+
+                    paramNames.add(paramName);
+                    paramValues.add(paramValue);
+                }
+
+                int id = 0;
+
+                for (int i = 0; i < paramNames.size(); i++) {
+                    if (paramNames.get(i).equals("id")) {
+                        String index = paramValues.get(i);
+                        id = Integer.parseInt(index);
+                    }
+                }
+                System.out.printf("%d번 명언이 삭제되었습니다.\n", id);
             }
         }
     }
