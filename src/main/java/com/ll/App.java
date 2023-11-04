@@ -35,16 +35,7 @@ public class App {
                 }
 
                 // 삭제 로직
-                // id에 맞는 인덱스 구하기
-                for (int i = 0; i < quotations.size(); i++) {
-                    Quotation quotation = quotations.get(i);
-                    if (quotation.id == id) {
-                        quotations.remove(i);
-                        break;
-                    }
-                }
-
-                System.out.printf("%d번 명언이 삭제되었습니다.\n", id);
+                deleteQuotation(id);
             }
         } // break; 로 끝나는 지점
     }
@@ -77,6 +68,20 @@ public class App {
             Quotation quotation = quotations.get(i);
             System.out.printf("%d / %s / %s\n", quotation.id, quotation.authorName, quotation.quotation);
         }
+    }
+
+    // 명언 삭제
+    void deleteQuotation(int id) {
+        // id에 맞는 인덱스 구하기
+        for (int i = 0; i < quotations.size(); i++) {
+            Quotation quotation = quotations.get(i);
+            if (quotation.id == id) {
+                quotations.remove(i);
+                break;
+            }
+        }
+
+        System.out.printf("%d번 명언이 삭제되었습니다.\n", id);
     }
 
     // 키보드 삭제 입력 시 id 추출
