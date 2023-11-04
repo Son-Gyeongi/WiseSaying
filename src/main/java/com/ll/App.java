@@ -1,5 +1,6 @@
 package com.ll;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -7,7 +8,9 @@ import java.util.Scanner;
 public class App {
     Scanner s = new Scanner(System.in);
     int quotationId = 0;
-    List<Quotation> quotations = new ArrayList<>(); // 명언 모음
+        List<Quotation> quotations = new ArrayList<>(); // 명언 모음
+    List<Quotation> quotationList = new ArrayList<>(); // 파일에서 불러오는 명언 모음
+    static final String folderPath = "C:/techitStudy/wiseSaying/fileSave/"; // 파일 불러올 경로
 
     public void run() {
         System.out.println("== 명언 앱 ==");
@@ -42,6 +45,7 @@ public class App {
         System.out.print("작가 : ");
         String authorName = s.nextLine();
 
+        /*  -> 메모리가 아닌 파일에 저장해서 주석
         quotationId++;
         int id = quotationId;
 
@@ -49,8 +53,21 @@ public class App {
         Quotation quotation = new Quotation(id, authorName, content);
         // List에 넣어주기
         quotations.add(quotation);
+         */
 
-        System.out.printf("%d번 명언이 등록되었습니다.\n", id);
+        // 파일에 저장
+        try {
+            FileWriter writer = new FileWriter(folderPath + authorName);
+            writer.write(content);
+            writer.close();
+            System.out.println("파일이 성공적으로 저장되었습니다.");
+        } catch (IOException e) {
+            System.out.println("파일 저장 중 오류가 발생했습니다.");
+            e.printStackTrace();
+        }
+
+        System.out.println("파일 테스트 중");
+//        System.out.printf("%d번 명언이 등록되었습니다.\n", id);
     }
 
     // 명언 목록
@@ -58,11 +75,42 @@ public class App {
         System.out.println("번호 / 작가 / 명언");
         System.out.println("----------------------");
 
-        for (int i = quotations.size() - 1; i >= 0; i--) {
+        // 파일 불러오기
+        File folder = new File(folderPath);
+        File[] files = folder.listFiles(); // file 제목들
+
+        if (files != null) {
+            for (File file : files) {
+                // 객체 생성
+                Quotation fileQuotation = new Quotation(quotationId, file.getName(), readContentFromFile(file));
+                // List에 넣어주기
+                quotationList.add(fileQuotation);
+            }
+        }
+
+        for (int i = quotationList.size() - 1; i >= 0; i--) {
             // List에서 꺼내기
-            Quotation quotation = quotations.get(i);
+            Quotation quotation = quotationList.get(i);
             System.out.printf("%d / %s / %s\n", quotation.id, quotation.authorName, quotation.quotation);
         }
+
+        quotationId++; // id가 까다롭군 ㅠㅠㅠㅠㅠ
+    }
+
+    // 파일 내용 읽어온다.
+    private static String readContentFromFile(File file) {
+        StringBuffer contentBuilder = new StringBuffer();
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                contentBuilder.append(line).append("\n");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return contentBuilder.toString();
     }
 
     // 명언 삭제
@@ -124,7 +172,7 @@ public class App {
 
     // 키보드 삭제 입력 시 id 추출
     int getParamAsInt(String cmd, String paramName) {
-        int id =0; // id값
+        int id = 0; // id값
         int defaultValue = 0; // id값이 없을 경우
 
         List<String> _paramName = new ArrayList<>();
