@@ -77,11 +77,13 @@ public class App {
             Quotation quotation = quotations.get(i);
             if (quotation.id == id) {
                 quotations.remove(i);
+                System.out.printf("%d번 명언이 삭제되었습니다.\n", id);
                 break;
             }
         }
 
-        System.out.printf("%d번 명언이 삭제되었습니다.\n", id);
+        // id 값이 없을 때, 존재하지 않는 id인 경우
+        System.out.printf("%d번 명언은 존재하지 않습니다.\n", id);
     }
 
     // 키보드 삭제 입력 시 id 추출
