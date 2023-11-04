@@ -36,6 +36,37 @@ public class App {
 
                 // 삭제 로직
                 deleteQuotation(id);
+            } else if (cmd.startsWith("수정?")) {
+                // 키보드 삭제 입력 시 id 추출, 삭제?id=1&archive=true
+                int id = getParamAsInt(cmd, "id");
+
+                if (id == 0) {
+                    System.out.println("id를 정확히 입력해주세요.");
+                    continue;
+                }
+
+                // 수정 로직
+                // 기존 명언 불러오기
+                for (int i = 0; i < quotations.size(); i++) {
+                    Quotation quotation = quotations.get(i);
+                    if (quotation.id == id) {
+                        System.out.println("명언(기존) : " + quotation.quotation);
+                        System.out.print("명언 : ");
+                        String newQuotation = s.nextLine();
+                        System.out.println("작가(기존) : " + quotation.authorName);
+                        System.out.print("작가 : ");
+                        String newAuthorNmae = s.nextLine();
+
+                        // 명언에 새로운 값 넣기
+                        quotation.setQuotation(newQuotation);
+                        quotation.setAuthorName(newAuthorNmae);
+                        return; // 메서드를 아예 빠져나간다.
+//                        break; // 반복문을 빠져나간다.
+                    }
+                }
+
+                // id 값이 없을 때, 존재하지 않는 id인 경우
+                System.out.printf("%d번 명언은 존재하지 않습니다.\n", id);
             }
         } // break; 로 끝나는 지점
     }
@@ -78,7 +109,7 @@ public class App {
             if (quotation.id == id) {
                 quotations.remove(i);
                 System.out.printf("%d번 명언이 삭제되었습니다.\n", id);
-                break;
+                return; // 메서드를 아예 빠져나간다.
             }
         }
 

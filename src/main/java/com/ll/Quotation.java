@@ -11,4 +11,24 @@ public class Quotation {
         this.authorName = authorName;
         this.quotation = quotation;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public String getQuotation() {
+        return quotation;
+    }
+
+    public void setQuotation(String quotation) {
+        this.quotation = quotation;
+    }
 }
