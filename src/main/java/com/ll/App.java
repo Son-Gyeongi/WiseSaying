@@ -26,29 +26,20 @@ public class App {
             } else if (cmd.startsWith("삭제?")) {
                 // startsWith() 괄호안에 시작하는 단어면 통과
 
-                int id =0;
+                // 키보드 삭제 입력 시 id 추출, 삭제?id=1&archive=true
+                int id = getParamAsInt(cmd, "id");
 
-                List<String> paramName = new ArrayList<>();
-                List<String> paramValue = new ArrayList<>();
-
-                // 삭제?id=1&archive=true 에서 1만 추출하기, Bits는 조각이라는 뜻
-                String[] cmdBits = cmd.split("\\?", 2);
-                String action = cmdBits[0]; // 삭제
-                String queryString = cmdBits[1]; // id=1&archive=true
-
-                String[] queryStringBits = queryString.split("&");
-
-                // '&'에서는 여러 개 나오니깐 for문으로
-                for (int i = 0; i < queryStringBits.length; i++) {
-                    String[] param = queryStringBits[i].split("=", 2);
-                    paramName.add(param[0]);
-                    paramValue.add(param[1]);
+                if (id == 0) {
+                    System.out.println("id를 정확히 입력해주세요.");
+                    continue;
                 }
 
-                // paramName에서 'id' 찾기
-                for (int i = 0; i < paramName.size(); i++) {
-                    if (paramName.get(i).equals("id")) {
-                        id = Integer.parseInt(paramValue.get(i));
+                // 삭제 로직
+                // id에 맞는 인덱스 구하기
+                for (int i = 0; i < quotations.size(); i++) {
+                    Quotation quotation = quotations.get(i);
+                    if (quotation.id == id) {
+                        quotations.remove(i);
                         break;
                     }
                 }
@@ -86,5 +77,45 @@ public class App {
             Quotation quotation = quotations.get(i);
             System.out.printf("%d / %s / %s\n", quotation.id, quotation.authorName, quotation.quotation);
         }
+    }
+
+    // 키보드 삭제 입력 시 id 추출
+    int getParamAsInt(String cmd, String paramName) {
+        int id =0; // id값
+        int defaultValue = 0; // id값이 없을 경우
+
+        List<String> _paramName = new ArrayList<>();
+        List<String> paramValue = new ArrayList<>();
+
+        try {
+            // 삭제?id=1&archive=true 에서 1만 추출하기, Bits는 조각이라는 뜻
+            String[] cmdBits = cmd.split("\\?", 2);
+//        String action = cmdBits[0]; // 삭제
+            String queryString = cmdBits[1]; // id=1&archive=true
+
+            String[] queryStringBits = queryString.split("&");
+
+            // '&'에서는 여러 개 나오니깐 for문으로
+            for (int i = 0; i < queryStringBits.length; i++) {
+                String[] param = queryStringBits[i].split("=", 2);
+                _paramName.add(param[0]);
+                paramValue.add(param[1]);
+            }
+        } catch (IndexOutOfBoundsException e) {
+            return defaultValue;
+        }
+
+        // paramName에서 'id' 찾기
+        for (int i = 0; i < _paramName.size(); i++) {
+            try {
+                if (_paramName.get(i).equals(paramName)) {
+                    return Integer.parseInt(paramValue.get(i));
+                }
+            } catch (NumberFormatException e) {
+                // return defaultValue; 밖에 있는 return이랑 같이 쓴다.
+            }
+        }
+
+        return defaultValue;
     }
 }
