@@ -5,13 +5,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class App {
-    List<String> paramNames = new ArrayList<>();
-    List<String> paramValues = new ArrayList<>();
 
     void run() {
         Scanner scanner = new Scanner(System.in);
         int lastQuotationId = 0;
-        List<Quotation> list = new ArrayList<>();
+        List<Quotation> quotations = new ArrayList<>();
 
         System.out.println("==명언 앱==");
 
@@ -31,21 +29,40 @@ public class App {
 
                 // 명언을 다뤄 줄 객체 생성
                 Quotation quotation = new Quotation(id, authorName, content);
-                list.add(quotation);
+                quotations.add(quotation);
 
                 System.out.printf("%d번 명언이 등록되었습니다.\n", id);
             } else if (cmd.equals("목록")) {
                 System.out.println("번호 / 작가 / 명언");
                 System.out.println("----------------------");
 
-                for (int i = list.size() - 1; i >= 0; i--) {
-                    Quotation quotation = list.get(i);
+                if (quotations.isEmpty()) {
+                    System.out.println("등록된 명언이 없습니다.");
+                }
+
+                for (int i = quotations.size() - 1; i >= 0; i--) {
+                    Quotation quotation = quotations.get(i);
                     System.out.printf("%d / %s / %s\n", quotation.id, quotation.authorName, quotation.content);
                 }
             } else if (cmd.startsWith("삭제?")) {
                 // parmaName "id"의 paramValue를 반환
                 int id = getParamAsInt(cmd, "id");
-                System.out.printf("%d번 명언이 삭제되었습니다.\n", id);
+
+                // 삭제 로직
+                if (id == 0) {
+                    System.out.println("id를 정확히 입력해주세요.");
+//                    return; // 함수를 끝낸다.
+                    continue;
+                }
+
+                for (int i = 0; i < quotations.size(); i++) {
+                    int quotationId = quotations.get(i).id;
+                    if (id == quotationId) {
+                        quotations.remove(i);
+                        System.out.printf("%d번 명언이 삭제되었습니다.\n", id);
+                        return;
+                    }
+                }
             }
         }
     }
@@ -53,6 +70,8 @@ public class App {
     // 입력 받은 queryString에서 paramNames, paramValues 나누기
     int getParamAsInt(String cmd, String paramName) {
         int defaultValue = 0; // 값이 없을 경우 반환값
+        List<String> paramNames = new ArrayList<>();
+        List<String> paramValues = new ArrayList<>();
 
         String[] cmdBits = cmd.split("\\?", 2);
 //        String action = cmdBits[0];
@@ -60,8 +79,8 @@ public class App {
 
         String[] queryStringBits = queryString.split("&");
 
-        for (int i = 0; i < queryStringBits.length; i++) {
-            String[] paramBits = queryStringBits[i].split("=", 2);
+        for (String queryStringBit : queryStringBits) { // 향상된 for문 (int i = 0; i < queryStringBits.length; i++)
+            String[] paramBits = queryStringBit.split("=", 2);
 
             String _paramName = paramBits[0];
             String paramValue = paramBits[1];
@@ -71,8 +90,12 @@ public class App {
         }
         for (int i = 0; i < paramNames.size(); i++) {
             if (paramNames.get(i).equals(paramName)) {
-                String index = paramValues.get(i);
-                 return Integer.parseInt(index);
+                try {
+                    String index = paramValues.get(i);
+                    return Integer.parseInt(index);
+                } catch (NumberFormatException e) {
+                    // 오류를 잡고 retrun defaultValue로 넘어간다.
+                }
             }
         }
         return defaultValue;
